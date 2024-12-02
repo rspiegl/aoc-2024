@@ -13,3 +13,7 @@ tasks {
         gradleVersion = "8.11.1"
     }
 }
+
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+}
