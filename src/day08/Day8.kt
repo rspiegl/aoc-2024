@@ -5,7 +5,7 @@ fun main() {
 
     fun part1(input: List<String>): Int {
         val map = input.toCharMap()
-        val antennas = map.getLocations("\\w").map { Antenna(it, map[it.y][it.x]) }
+        val antennas = map.getLocations("\\w").map { Antenna(it, map[it.row][it.column]) }
         val groupedAntennas = antennas.groupBy(Antenna::frequency, Antenna::location)
         val antennaCombinations = groupedAntennas.mapValues { it.value.combinations() }
         val antiNodes = antennaCombinations.flatMap { (_, locations) ->
@@ -18,7 +18,7 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         val map = input.toCharMap()
-        val antennas = map.getLocations("\\w").map { Antenna(it, map[it.y][it.x]) }
+        val antennas = map.getLocations("\\w").map { Antenna(it, map[it.row][it.column]) }
         val groupedAntennas = antennas.groupBy(Antenna::frequency, Antenna::location)
         val antennaCombinations = groupedAntennas.mapValues { it.value.combinations() }
         val mapDimension = Dimension(map[0].size, map.size)
@@ -39,7 +39,7 @@ fun main() {
 
 data class Antenna(val location: Vector2D, val frequency: Char) {
     override fun toString(): String {
-        return "$frequency at x=${location.x}, y=${location.y}"
+        return "$frequency at x=${location.column}, y=${location.row}"
     }
 }
 

@@ -6,7 +6,7 @@ fun main() {
         val guardPosition = map.withIndex().find { (_, row) -> row.contains('^') }!!.let { (rowIndex, row) ->
             rowIndex to row.indexOf('^')
         }.toMutablePair()
-        val direction = Direction.fromChar(map[guardPosition.row][guardPosition.column])
+        val direction = Direction6.fromChar(map[guardPosition.row][guardPosition.column])
         val guard = Guard(guardPosition, direction, map)
         return guard
     }
@@ -72,7 +72,7 @@ fun main() {
     part2(input).println()
 }
 
-enum class Direction(val value: Int) {
+enum class Direction6(val value: Int) {
     UP(0), RIGHT(1), DOWN(2), LEFT(3);
 
     fun turnRight() = when(this) {
@@ -93,25 +93,25 @@ enum class Direction(val value: Int) {
     }
 }
 
-data class Guard(val position: MutablePair, var direction: Direction, var map: Array<CharArray>) {
+data class Guard(val position: MutablePair, var direction: Direction6, var map: Array<CharArray>) {
     private var initialGuardState: Guard? = null
     private var historyHashes = mutableSetOf<Int>()
 
     fun move() {
         markVisited()
         when(direction) {
-            Direction.UP -> position.row--
-            Direction.DOWN -> position.row++
-            Direction.LEFT -> position.column--
-            Direction.RIGHT -> position.column++
+            Direction6.UP -> position.row--
+            Direction6.DOWN -> position.row++
+            Direction6.LEFT -> position.column--
+            Direction6.RIGHT -> position.column++
         }
     }
 
     private fun returnNextPosition() = when(direction) {
-        Direction.UP -> map[position.row - 1][position.column]
-        Direction.DOWN -> map[position.row + 1][position.column]
-        Direction.LEFT -> map[position.row][position.column - 1]
-        Direction.RIGHT -> map[position.row][position.column + 1]
+        Direction6.UP -> map[position.row - 1][position.column]
+        Direction6.DOWN -> map[position.row + 1][position.column]
+        Direction6.LEFT -> map[position.row][position.column - 1]
+        Direction6.RIGHT -> map[position.row][position.column + 1]
     }
 
     fun isBlocked() = when {
@@ -156,10 +156,10 @@ data class Guard(val position: MutablePair, var direction: Direction, var map: A
     private fun Array<CharArray>.put(char: Char, inFront: Boolean) {
         if(inFront) {
             when(direction) {
-                Direction.UP -> this[position.row - 1][position.column] = char
-                Direction.DOWN -> this[position.row + 1][position.column] = char
-                Direction.LEFT -> this[position.row][position.column - 1] = char
-                Direction.RIGHT -> this[position.row][position.column + 1] = char
+                Direction6.UP -> this[position.row - 1][position.column] = char
+                Direction6.DOWN -> this[position.row + 1][position.column] = char
+                Direction6.LEFT -> this[position.row][position.column - 1] = char
+                Direction6.RIGHT -> this[position.row][position.column + 1] = char
             }
         } else {
             this[position.row][position.column] = char

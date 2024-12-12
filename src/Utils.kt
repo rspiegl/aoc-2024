@@ -1,6 +1,7 @@
 import java.awt.Dimension
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import kotlin.math.absoluteValue
 import kotlin.math.pow
 
 /**
@@ -81,7 +82,7 @@ fun Array<IntArray>.buildAdjacencyList(): Map<Vector2D, List<Vector2D>> {
             val currentPoint = Vector2D(column, row)
             val currentHeight = this[row][column]
             val connections = paths.map { currentPoint + it }
-                .filter { it.inBounds(Dimension(this[0].size, size)) && this[it.y][it.x] == currentHeight+1 }
+                .filter { it.inBounds(Dimension(this[0].size, size)) && this[it.row][it.column] == currentHeight+1 }
             adjacencyList[currentPoint] = connections
         }
     }
@@ -120,18 +121,22 @@ fun bfsPathEnds(graph: Map<Vector2D, List<Vector2D>>, start: Vector2D): List<Vec
 /**
  * A 2D vector class.
  */
-data class Vector2D(val x: Int, val y: Int) {
+data class Vector2D(val column: Int, val row: Int) {
 
     /**
      * Returns true if the vector is within the bounds of the given dimension.
      */
-    fun inBounds(dim: Dimension) = x in 0 until dim.width && y in 0 until dim.height
+    fun inBounds(dim: Dimension) = column in 0 until dim.width && row in 0 until dim.height
+    fun getLeft() = Vector2D(column - 1, row)
+    fun getRight() = Vector2D(column + 1, row)
+    fun getUp() = Vector2D(column, row - 1)
+    fun getDown() = Vector2D(column, row + 1)
 
-    operator fun plus(other: Vector2D) = Vector2D(x + other.x, y + other.y)
-    operator fun minus(other: Vector2D) = Vector2D(x - other.x, y - other.y)
+    operator fun plus(other: Vector2D) = Vector2D(column + other.column, row + other.row)
+    operator fun minus(other: Vector2D) = Vector2D(column - other.column, row - other.row)
 
     override fun hashCode(): Int {
-        return x * 10000 + y
+        return column * 10000 + row
     }
 
     override fun equals(other: Any?): Boolean {
@@ -140,9 +145,84 @@ data class Vector2D(val x: Int, val y: Int) {
 
         other as Vector2D
 
-        if (x != other.x) return false
-        if (y != other.y) return false
+        if (column != other.column) return false
+        if (row != other.row) return false
 
         return true
+    }
+
+    fun adjacent(point: Vector2D): Boolean {
+        return manhattanDistance(point) == 1
+    }
+
+    fun manhattanDistance(point: Vector2D): Int {
+        return (column - point.column).absoluteValue + (row - point.row).absoluteValue
+    }
+}
+
+fun Array<CharArray>.getValues(location: Vector2D, directions: List<Direction>): List<Char> {
+    return directions.map { location + it.offset }.filter { it.inBounds(Dimension(this[0].size, size)) }.map { this[it.row][it.column] }
+}
+
+fun Array<CharArray>.getValueLocations(): Map<Char, List<Vector2D>> {
+    val valueLocations = mutableMapOf<Char, MutableList<Vector2D>>()
+    for (row in indices) {
+        for (column in this[row].indices) {
+            valueLocations.computeIfAbsent(this[row][column]) { mutableListOf() }.add(Vector2D(column, row))
+        }
+    }
+    return valueLocations
+}
+
+fun Array<CharArray>.get(location: Vector2D): Char {
+    return this[location.row][location.column]
+}
+
+fun concatenatedRegions(locations: List<Vector2D>): List<Set<Vector2D>> {
+    val regions = mutableListOf<MutableSet<Vector2D>>()
+    for (location in locations) {
+        val region = regions.firstOrNull { it.any { it.adjacent(location) } }
+        if (region == null) {
+            regions.add(mutableSetOf(location))
+        } else {
+            region.add(location)
+        }
+    }
+    // sanity check
+    var inProgress = true
+    while (inProgress) {
+        inProgress = false
+        for (i in regions.indices) {
+            for (j in i + 1 until regions.size) {
+                if (regions[i].any { first -> regions[j].any { second -> first.adjacent(second) } }) {
+                    regions[i].addAll(regions[j])
+                    regions.removeAt(j)
+                    inProgress = true
+                    break
+                }
+            }
+        }
+    }
+    return regions
+}
+
+enum class Direction(val offset: Vector2D) {
+    NORTH(Vector2D(0, -1)),
+    EAST(Vector2D(1, 0)),
+    SOUTH(Vector2D(0, 1)),
+    WEST(Vector2D(-1, 0));
+
+    fun turnRight() = when(this) {
+        NORTH -> EAST
+        EAST -> SOUTH
+        SOUTH -> WEST
+        WEST -> NORTH
+    }
+
+    fun turnLeft() = when(this) {
+        NORTH -> WEST
+        EAST -> NORTH
+        SOUTH -> EAST
+        WEST -> SOUTH
     }
 }
