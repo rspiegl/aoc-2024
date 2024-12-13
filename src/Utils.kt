@@ -132,6 +132,17 @@ data class Vector2D(val column: Int, val row: Int) {
     fun getUp() = Vector2D(column, row - 1)
     fun getDown() = Vector2D(column, row + 1)
 
+
+    fun fitsInside(other: Vector2D) = column <= other.column && row <= other.row
+
+    fun scalarFit(other: Vector2D): Int {
+        val columnFit = other.column / column
+        val rowFit = other.row / row
+        return minOf(columnFit, rowFit)
+    }
+
+    operator fun times(scalar: Int) = Vector2D(column * scalar, row * scalar)
+    operator fun div(scalar: Int) = Vector2D(column / scalar, row / scalar)
     operator fun plus(other: Vector2D) = Vector2D(column + other.column, row + other.row)
     operator fun minus(other: Vector2D) = Vector2D(column - other.column, row - other.row)
 
@@ -206,6 +217,15 @@ fun concatenatedRegions(locations: List<Vector2D>): List<Set<Vector2D>> {
     return regions
 }
 
+fun Pair<Long, Long>.scalarFit(other: Pair<Long, Long>): Long {
+    val columnFit = other.first / first
+    val rowFit = other.second / second
+    return minOf(columnFit, rowFit)
+}
+operator fun Pair<Long, Long>.times(scalar: Long) = Pair(first * scalar, second * scalar)
+operator fun Pair<Long, Long>.plus(other: Pair<Long, Long>) = Pair(first + other.first, second + other.second)
+operator fun Pair<Long, Long>.minus(other: Pair<Long, Long>) = Pair(first - other.first, second - other.second)
+
 enum class Direction(val offset: Vector2D) {
     NORTH(Vector2D(0, -1)),
     EAST(Vector2D(1, 0)),
@@ -225,4 +245,10 @@ enum class Direction(val offset: Vector2D) {
         SOUTH -> EAST
         WEST -> SOUTH
     }
+}
+
+fun extendedGcd(a: Long, b: Long): Triple<Long, Long, Long> {
+    if (a == 0L) return Triple(b, 0, 1)
+    val (gcd, x1, y1) = extendedGcd(b % a, a)
+    return Triple(gcd, y1 - (b / a) * x1, x1)
 }
