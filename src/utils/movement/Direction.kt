@@ -2,6 +2,7 @@ package utils.movement
 
 import utils.point.Point
 
+@Suppress("unused")
 enum class Direction(val offset: Point) {
     NORTH(Point(0, -1)),
     EAST(Point(1, 0)),

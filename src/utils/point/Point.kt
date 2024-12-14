@@ -2,9 +2,7 @@ package utils.point
 
 import kotlin.math.absoluteValue
 
-/**
- * A 2D vector class.
- */
+@Suppress("unused")
 data class Point(val x: Int, val y: Int) {
     constructor(x: Number, y: Number) : this(x.toInt(), y.toInt())
 

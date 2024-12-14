@@ -2,9 +2,7 @@ package utils.point
 
 import kotlin.math.absoluteValue
 
-/**
- * A 2D vector class.
- */
+@Suppress("unused")
 data class LongPoint(val x: Long, val y: Long) {
     constructor(x: Number, y: Number) : this(x.toLong(), y.toLong())
 
