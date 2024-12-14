@@ -1,6 +1,5 @@
 package utils.point
 
-import java.awt.Dimension
 import kotlin.math.absoluteValue
 
 /**
@@ -16,10 +15,13 @@ data class Point(val x: Int, val y: Int) {
 
     val column: Int
         get() = x
+    val width: Int
+        get() = x
 
     val row: Int
         get() = y
-
+    val height: Int
+        get() = y
 
     fun isInside(maxX: Int, maxY: Int) = x in 0 until maxX && y in 0 until maxY
 
@@ -38,9 +40,9 @@ data class Point(val x: Int, val y: Int) {
         return (x - point.x).absoluteValue + (y - point.y).absoluteValue
     }
 
-    fun wrap(p0: Dimension): Point {
-        val x = (x + p0.width) % p0.width
-        val y = (y + p0.height) % p0.height
+    fun wrap(p: Point): Point {
+        val x = (x + p.width) % p.width
+        val y = (y + p.height) % p.height
         return Point(x, y)
     }
 

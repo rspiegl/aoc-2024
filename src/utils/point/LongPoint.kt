@@ -1,6 +1,5 @@
 package utils.point
 
-import java.awt.Dimension
 import kotlin.math.absoluteValue
 
 /**
@@ -37,9 +36,9 @@ data class LongPoint(val x: Long, val y: Long) {
         return (x - point.x).absoluteValue + (y - point.y).absoluteValue
     }
 
-    fun wrap(p0: Dimension): LongPoint {
-        val x = (x + p0.width) % p0.width
-        val y = (y + p0.height) % p0.height
+    fun wrap(p: Point): LongPoint {
+        val x = (x + p.width) % p.width
+        val y = (y + p.height) % p.height
         return LongPoint(x, y)
     }
 
