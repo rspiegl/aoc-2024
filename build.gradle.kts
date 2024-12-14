@@ -15,5 +15,5 @@ tasks {
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("io.ktor:ktor-client-core:3.0.2")
 }

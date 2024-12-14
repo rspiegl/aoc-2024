@@ -1,33 +1,28 @@
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.time.LocalDate
-import kotlin.io.path.*
+import kotlin.io.path.Path
+import kotlin.io.path.createDirectories
+import kotlin.io.path.exists
+import kotlin.io.path.readText
 
-fun main() {
-    val todaysDay = LocalDate.now().dayOfMonth
-    val folderPath = "src/day${todaysDay.toString().padStart(2, '0')}"
+fun main() = runBlocking {
+    val day = LocalDate.now().dayOfMonth
+    val folderPath = "src/day${day.toString().padStart(2, '0')}"
     if (Path(folderPath).exists()) {
-        println("Day $todaysDay already exists.")
-        return
+        println("Day $day already exists.")
+        return@runBlocking
     } else {
         Path(folderPath).createDirectories()
     }
 
-    val filePath = "$folderPath/Day$todaysDay"
-    OkHttpClient().newCall(
-        Request.Builder()
-            .get()
-            .url("https://adventofcode.com/2024/day/$todaysDay/input")
-            .addHeader("Cookie", "session=YOUR_SESSION_COOKIE")
-            .build()
-    ).execute().use { response ->
-        if (!response.isSuccessful) throw RuntimeException("Failed to fetch input: $response")
-        File("$filePath.txt").writeText(response.body!!.string())
-    }
+    val filePath = "$folderPath/Day$day"
+    val client = AOCClient(System.getenv("AOC_SESSION"))
+    val puzzleInput = client.getPuzzleInput(day)
+    File("$filePath.txt").writeText(puzzleInput)
 
     val dayReplaceString = "DAY_NUMBER"
-    Path("src/Template.txt").readText().replace(dayReplaceString, todaysDay.toString()).let {
+    Path("src/Template.txt").readText().replace(dayReplaceString, day.toString()).let {
         File("$filePath.kt").writeText(it)
     }
 
