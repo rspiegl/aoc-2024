@@ -1,3 +1,9 @@
+package day07
+
+import utils.permutationsWithReplacement
+import utils.println
+import utils.readInput
+
 fun main() {
     val latestDay = 7
 

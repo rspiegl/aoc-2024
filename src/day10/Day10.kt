@@ -1,10 +1,18 @@
+package day10
+
+import utils.bfs
+import utils.bfsPathEnds
+import utils.map.IntMap
+import utils.println
+import utils.readInput
+
 fun main() {
     val latestDay = 10
 
     fun part1(input: List<String>): Int {
-        val topography = input.toIntMap()
-        val hikingStarts = topography.getLocations(0)
-        val hikingEnds = topography.getLocations(9)
+        val topography = IntMap.of(input)
+        val hikingStarts = topography.getLocations(setOf(0))
+        val hikingEnds = topography.getLocations(setOf(9))
         val adjacencyList = topography.buildAdjacencyList()
         val sum = hikingStarts.sumOf { hikingStart ->
             val visited = bfs(adjacencyList, hikingStart)
@@ -15,9 +23,9 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        val topography = input.toIntMap()
-        val hikingStarts = topography.getLocations(0)
-        val hikingEnds = topography.getLocations(9)
+        val topography = IntMap.of(input)
+        val hikingStarts = topography.getLocations(setOf(0))
+        val hikingEnds = topography.getLocations(setOf(9))
         val adjacencyList = topography.buildAdjacencyList()
         val sum = hikingStarts.sumOf { hikingStart ->
             val pathEnds = bfsPathEnds(adjacencyList, hikingStart)

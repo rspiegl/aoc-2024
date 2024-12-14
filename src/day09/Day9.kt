@@ -1,3 +1,8 @@
+package day09
+
+import utils.println
+import utils.readInput
+
 fun main() {
     val latestDay = 9
 
@@ -154,7 +159,7 @@ class FileBlock(val id: Long, var length: Int): Block {
     }
 
     override fun toString(): String {
-        return "FileBlock(id=$id, length=$length)"
+        return "day09.FileBlock(id=$id, length=$length)"
     }
 
     fun copy(newLength: Int): Block {
@@ -169,7 +174,7 @@ class FreeBlock(var length: Int): Block {
     }
 
     override fun toString(): String {
-        return "FreeBlock(length=$length)"
+        return "day09.FreeBlock(length=$length)"
     }
 
     fun reduceBy(amount: Int) {

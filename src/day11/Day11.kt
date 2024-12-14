@@ -1,3 +1,8 @@
+package day11
+
+import utils.println
+import utils.readInput
+
 fun main() {
     val latestDay = 11
 
