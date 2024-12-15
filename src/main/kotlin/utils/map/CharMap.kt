@@ -10,6 +10,12 @@ data class CharMap(val width: Int, val height: Int) {
 
     operator fun get(location: Point): Char = data[location.row][location.column]
     operator fun get(column: Int, row: Int): Char = data[row][column]
+    operator fun get(locations: Iterable<Point>): List<Char> = locations.map { this[it] }
+
+
+    operator fun set(at: Point, value: Char) {
+        data[at.row][at.column] = value
+    }
 
     fun getLocations(regex: String): List<Point> {
         val toMatch = regex.toRegex()

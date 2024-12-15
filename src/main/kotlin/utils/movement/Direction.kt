@@ -22,4 +22,18 @@ enum class Direction(val offset: Point) {
         SOUTH -> EAST
         WEST -> SOUTH
     }
+
+    companion object {
+        fun fromChar(c: Char) = when (c.lowercaseChar()) {
+            'n' -> NORTH
+            'e' -> EAST
+            's' -> SOUTH
+            'w' -> WEST
+            '^' -> NORTH
+            '>' -> EAST
+            'v' -> SOUTH
+            '<' -> WEST
+            else -> throw IllegalArgumentException("Invalid direction: $c")
+        }
+    }
 }
