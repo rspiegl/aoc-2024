@@ -1,4 +1,7 @@
-package year<YEAR>.day<DAY>
+package year<YEAR>.day<DAY_PADDED>
+
+import utils.println
+import utils.readInput
 
 import utils.println
 import utils.readInput

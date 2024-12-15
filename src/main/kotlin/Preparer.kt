@@ -5,9 +5,10 @@ import kotlin.io.path.*
 class Preparer {
     private val yearReplaceString = "<YEAR>"
     private val dayReplaceString = "<DAY>"
+    private val dayPaddedReplaceString = "<DAY_PADDED>"
 
-    private val codePath = "src/main/kotlin/year%d/day%02d/Day%02d.kt"
-    private val resourcePath = "src/main/resources/year%d/day%02d/Day%02d"
+    private val codePath = "src/main/kotlin/year%d/day%02d/"
+    private val resourcePath = "src/main/resources/year%d/day%02d/"
 
     suspend fun prepare(year: Int, day: Int) {
         val codePath = codePath.format(year, day, day)
@@ -21,17 +22,20 @@ class Preparer {
         val puzzleInput = client.getPuzzleInput(year, day)
 
         Path(codePath).createDirectories()
+        val dayPadded = day.toString().padStart(2, '0')
         Path("src/main/resources/Template.txt").readText()
-            .replace(dayReplaceString, day.toString().padStart(2, '0'))
+            .replace(dayReplaceString, day.toString())
+            .replace(dayPaddedReplaceString, dayPadded)
             .replace(yearReplaceString, year.toString())
             .let {
-                Path(codePath).writeText(it)
+                Path(codePath + "Day$dayPadded.kt").writeText(it)
             }
 
         val resourcesPath = resourcePath.format(year, day, day)
-        Path("$resourcesPath.txt").writeText(puzzleInput)
+        Path(resourcesPath).createDirectories()
+        Path("${resourcesPath}Day${dayPadded}.txt").writeText(puzzleInput)
 
-        Path("${resourcesPath}_test.txt").createFile()
+        Path("${resourcesPath}Day${dayPadded}_test.txt").createFile()
     }
 }
 
