@@ -23,6 +23,13 @@ enum class Direction(val offset: Point) {
         WEST -> SOUTH
     }
 
+    fun toChar(): Char = when (this) {
+        NORTH -> '^'
+        EAST -> '>'
+        SOUTH -> 'v'
+        WEST -> '<'
+    }
+
     companion object {
         fun fromChar(c: Char) = when (c.lowercaseChar()) {
             'n' -> NORTH
@@ -34,6 +41,17 @@ enum class Direction(val offset: Point) {
             'v' -> SOUTH
             '<' -> WEST
             else -> throw IllegalArgumentException("Invalid direction: $c")
+        }
+
+        fun fromPoints(from: Point, to: Point): Direction {
+            val diff = to - from
+            return when {
+                diff.x < 0 -> WEST
+                diff.x > 0 -> EAST
+                diff.y < 0 -> NORTH
+                diff.y > 0 -> SOUTH
+                else -> throw IllegalArgumentException("Invalid direction: $from -> $to")
+            }
         }
     }
 }
