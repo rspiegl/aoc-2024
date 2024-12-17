@@ -1,6 +1,5 @@
 package year2024.day13
 
-import utils.extendedGcd
 import utils.point.LongPoint
 import utils.point.Point
 import utils.println
@@ -39,7 +38,7 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        var sum = 0L
+        var sum = 0.0
         for (i in input.indices step 4) {
             val a = LongPoint(input[i].substring(12, 14).toLong(), input[i].substring(18, 20).toLong())
             val b = LongPoint(input[i + 1].substring(12, 14).toLong(), input[i + 1].substring(18, 20).toLong())
@@ -47,20 +46,19 @@ fun main() {
                 "X=(\\d+),".toRegex().find(input[i + 2])!!.groups[1]!!.value.toInt() + 10000000000000,
                 "Y=(\\d+)".toRegex().find(input[i + 2])!!.groups[1]!!.value.toInt() + 10000000000000
             )
-            val (gcd, x0, y0) = extendedGcd(a.x, b.x)
-            if (prize.x % gcd != 0L) continue
+            // u * a.x + v * b.x = prize.x
+            // u * a.y + v * b.y = prize.y
+            val det = a.x * b.y - a.y * b.x
+            val u = (prize.x * b.y - prize.y * b.x) / det
+            val v = (a.x * prize.y - a.y * prize.x) / det
 
-            val x = prize.x / gcd
-            val nx = x0 * x
-            val mx = y0 * x
-            val k = (prize.y - (nx * a.y + mx * b.y)) / ((b.x * a.y - a.x * b.y) / gcd)
-            val n = nx + k * (b.x / gcd)
-            val m = mx - k * (a.x / gcd)
-            if ((a * n + b * m) == prize) {
-                sum += n * 3 + m
+            val calculatedPrizeX = a.x * u + b.x * v
+            val calculatedPrizeY = a.y * u + b.y * v
+            if ((calculatedPrizeX == prize.x) && (calculatedPrizeY == prize.y)) {
+                sum += u * 3 + v
             }
         }
-        return sum
+        return sum.toLong()
     }
 
     val testInput = readInput(year, day, suffix = "_test")
@@ -68,6 +66,6 @@ fun main() {
     val input = readInput(year, day)
     part1(input).println()
 
-    //check(part2(testInput) == 1L)
+    check(part2(testInput) == 875318608908L)
     part2(input).println()
 }
