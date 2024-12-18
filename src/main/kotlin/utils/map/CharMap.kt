@@ -6,7 +6,7 @@ import utils.point.Point
 @Suppress("unused")
 data class CharMap(val width: Int, val height: Int) {
 
-    var data: Array<CharArray> = Array(height) { CharArray(width) }
+    var data: Array<CharArray> = Array(height) { CharArray(width) { '.' } }
 
     operator fun get(location: Point): Char = data[location.row][location.column]
     operator fun get(column: Int, row: Int): Char = data[row][column]

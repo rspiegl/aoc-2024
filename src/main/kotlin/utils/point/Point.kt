@@ -49,6 +49,7 @@ data class Point(val x: Int, val y: Int) {
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
     operator fun plus(scalar: Int) = Point(x + scalar, y + scalar)
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
+    operator fun minus(scalar: Int) = Point(x - scalar, y - scalar)
 
     override fun toString(): String {
         return "($x, $y)"
