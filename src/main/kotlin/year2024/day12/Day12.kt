@@ -90,33 +90,33 @@ class Plot(var area: Int, var perimeter: Int, val inside: MutableList<Point> = m
             for (column in minX..maxX) {
                 val location = Point(column, row)
                 if (isInside(location)) {
-                    val left = location.left()
+                    val left = location.left
                     if (!isInside(left)) {
-                        if (left.up() !in visitedSides["LEFT"]!! && left.down() !in visitedSides["LEFT"]!!) {
+                        if (left.up !in visitedSides["LEFT"]!! && left.down !in visitedSides["LEFT"]!!) {
                             sides++
                         }
                         visitedSides["LEFT"]!!.add(left)
                     }
 
-                    val right = location.right()
+                    val right = location.right
                     if (!isInside(right)) {
-                        if (right.up() !in visitedSides["RIGHT"]!! && right.down() !in visitedSides["RIGHT"]!!) {
+                        if (right.up !in visitedSides["RIGHT"]!! && right.down !in visitedSides["RIGHT"]!!) {
                             sides++
                         }
                         visitedSides["RIGHT"]!!.add(right)
                     }
 
-                    val up = location.up()
+                    val up = location.up
                     if (!isInside(up)) {
-                        if (up.left() !in visitedSides["UP"]!! && up.right() !in visitedSides["UP"]!!) {
+                        if (up.left !in visitedSides["UP"]!! && up.right !in visitedSides["UP"]!!) {
                             sides++
                         }
                         visitedSides["UP"]!!.add(up)
                     }
 
-                    val down = location.down()
+                    val down = location.down
                     if (!isInside(down)) {
-                        if (down.left() !in visitedSides["DOWN"]!! && down.right() !in visitedSides["DOWN"]!!) {
+                        if (down.left !in visitedSides["DOWN"]!! && down.right !in visitedSides["DOWN"]!!) {
                             sides++
                         }
                         visitedSides["DOWN"]!!.add(down)

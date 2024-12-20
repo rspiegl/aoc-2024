@@ -30,6 +30,20 @@ data class CharMap(val width: Int, val height: Int) {
         return locations
     }
 
+    private fun isValidNextStep(location: Point, previous: Point): Boolean {
+        return location != previous && location.isInside(width, height) && this[location] != '#'
+    }
+
+    fun next(current: Point, previous: Point): Point? {
+        return when {
+            isValidNextStep(current.right, previous) -> current.right
+            isValidNextStep(current.down, previous) -> current.down
+            isValidNextStep(current.left, previous) -> current.left
+            isValidNextStep(current.up, previous) -> current.up
+            else -> null
+        }
+    }
+
     fun getValues(location: Point, directions: List<Direction>): List<Char> {
         return directions.map { location + it.offset }.filter { it.isInside(width, height) }.map { this[it] }
     }

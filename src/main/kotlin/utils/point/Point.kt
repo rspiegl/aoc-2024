@@ -5,11 +5,16 @@ import kotlin.math.absoluteValue
 @Suppress("unused")
 data class Point(val x: Int, val y: Int) {
     constructor(x: Number, y: Number) : this(x.toInt(), y.toInt())
+    constructor(pair: Pair<Int, Int>) : this(pair.first, pair.second)
 
-    fun left() = Point(x - 1, y)
-    fun right() = Point(x + 1, y)
-    fun up() = Point(x, y - 1)
-    fun down() = Point(x, y + 1)
+    val right: Point
+        get() = Point(x + 1, y)
+    val left: Point
+        get() = Point(x - 1, y)
+    val up: Point
+        get() = Point(x, y - 1)
+    val down: Point
+        get() = Point(x, y + 1)
 
     val column: Int
         get() = x
@@ -42,6 +47,10 @@ data class Point(val x: Int, val y: Int) {
         val x = (x + p.width) % p.width
         val y = (y + p.height) % p.height
         return Point(x, y)
+    }
+
+    fun getCardinals(): List<Point> {
+        return listOf(left, right, up, down)
     }
 
     operator fun times(scalar: Int) = Point(x * scalar, y * scalar)

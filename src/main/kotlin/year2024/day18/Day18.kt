@@ -3,6 +3,7 @@ package year2024.day18
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath
 import org.jgrapht.graph.DefaultDirectedGraph
 import org.jgrapht.graph.DefaultEdge
+import utils.graph.addEdgeWithVertices
 import utils.map.CharMap
 import utils.movement.Direction
 import utils.point.Point
@@ -27,7 +28,7 @@ fun main() {
             Direction.entries.forEach { direction ->
                 val nextPoint = point + direction.offset
                 if (nextPoint in paths) {
-                    graph.addEdgeNew(point, nextPoint)
+                    graph.addEdgeWithVertices(point, nextPoint)
                 }
             }
         }
@@ -50,7 +51,7 @@ fun main() {
             Direction.entries.forEach { direction ->
                 val nextPoint = point + direction.offset
                 if (nextPoint in paths) {
-                    graph.addEdgeNew(point, nextPoint)
+                    graph.addEdgeWithVertices(point, nextPoint)
                 }
             }
         }
@@ -74,10 +75,4 @@ fun main() {
 
     check(part2(testInput, Point(7, 7) to 12) == "6,1")
     part2(input, Point(71, 71) to 1024).println()
-}
-
-private fun <V, E> DefaultDirectedGraph<V, E>.addEdgeNew(start: V, end: V) {
-    this.addVertex(start)
-    this.addVertex(end)
-    this.addEdge(start, end)
 }

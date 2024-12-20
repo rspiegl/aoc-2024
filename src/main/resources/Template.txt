@@ -2,27 +2,28 @@ package year<YEAR>.day<DAY_PADDED>
 
 import utils.println
 import utils.readInput
+import kotlin.time.measureTime
 
-import utils.println
-import utils.readInput
+class RenameSolution(private val input: List<String>) {
+
+        fun part1(): Int {
+            return 0
+        }
+
+        fun part2(): Int {
+            return 0
+        }
+}
 
 fun main() {
     val year = <YEAR>
     val day = <DAY>
 
-    fun part1(input: List<String>): Int {
-        return input.size
-    }
+    val solutionTest = RenameSolution(readInput(year, day, suffix = "_test"))
+    check(solutionTest.part1() == 0)
+    val solution = RenameSolution(readInput(year, day))
+    measureTime { print("Part 1 result ${solution.part1()} in ") }.println()
 
-    fun part2(input: List<String>): Int {
-        return input.size
-    }
-
-    val testInput = readInput(year, day, suffix = "_test")
-    check(part1(testInput) == 1)
-    val input = readInput(year, day)
-    part1(input).println()
-
-    check(part2(testInput) == 1)
-    part2(input).println()
+    check(solutionTest.part2() == 0)
+    measureTime { print("Part 2 result ${solution.part2()} in ") }.println()
 }

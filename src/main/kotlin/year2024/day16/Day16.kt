@@ -4,6 +4,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath
 import org.jgrapht.alg.shortestpath.YenKShortestPath
 import org.jgrapht.graph.DefaultDirectedWeightedGraph
 import org.jgrapht.graph.DefaultWeightedEdge
+import utils.graph.addEdgeWithWeight
 import utils.map.CharMap
 import utils.movement.Direction
 import utils.point.Point
@@ -25,16 +26,24 @@ fun main() {
         graph.addVertex(startDirectedPoint)
         graph.addVertex(endDirectedPoint)
         Direction.entries.forEach {
-            graph.addEdgeNew(DirectedPoint(end, it), endDirectedPoint, 0)
+            graph.addEdgeWithWeight(DirectedPoint(end, it), endDirectedPoint, 0)
         }
         paths.forEach { point ->
             Direction.entries.forEach { direction ->
                 val nextPoint = point + direction.offset
                 if (nextPoint in paths) {
-                    graph.addEdgeNew(DirectedPoint(point, direction), DirectedPoint(nextPoint, direction), 1)
+                    graph.addEdgeWithWeight(DirectedPoint(point, direction), DirectedPoint(nextPoint, direction), 1)
                 }
-                graph.addEdgeNew(DirectedPoint(point, direction), DirectedPoint(point, direction.turnRight()), 1000)
-                graph.addEdgeNew(DirectedPoint(point, direction), DirectedPoint(point, direction.turnLeft()), 1000)
+                graph.addEdgeWithWeight(
+                    DirectedPoint(point, direction),
+                    DirectedPoint(point, direction.turnRight()),
+                    1000
+                )
+                graph.addEdgeWithWeight(
+                    DirectedPoint(point, direction),
+                    DirectedPoint(point, direction.turnLeft()),
+                    1000
+                )
             }
         }
         val spa = DijkstraShortestPath(graph)
@@ -52,16 +61,24 @@ fun main() {
         val endDirectedPoint = DirectedPoint(end, Direction.EAST)
         graph.addVertex(startDirectedPoint)
         Direction.entries.forEach {
-            graph.addEdgeNew(DirectedPoint(end, it), endDirectedPoint, 0)
+            graph.addEdgeWithWeight(DirectedPoint(end, it), endDirectedPoint, 0)
         }
         points.forEach { point ->
             Direction.entries.forEach { direction ->
                 val nextPoint = point + direction.offset
                 if (nextPoint in points) {
-                    graph.addEdgeNew(DirectedPoint(point, direction), DirectedPoint(nextPoint, direction), 1)
+                    graph.addEdgeWithWeight(DirectedPoint(point, direction), DirectedPoint(nextPoint, direction), 1)
                 }
-                graph.addEdgeNew(DirectedPoint(point, direction), DirectedPoint(point, direction.turnRight()), 1000)
-                graph.addEdgeNew(DirectedPoint(point, direction), DirectedPoint(point, direction.turnLeft()), 1000)
+                graph.addEdgeWithWeight(
+                    DirectedPoint(point, direction),
+                    DirectedPoint(point, direction.turnRight()),
+                    1000
+                )
+                graph.addEdgeWithWeight(
+                    DirectedPoint(point, direction),
+                    DirectedPoint(point, direction.turnLeft()),
+                    1000
+                )
             }
         }
         val spa = DijkstraShortestPath(graph)
@@ -83,13 +100,6 @@ fun main() {
 
     check(part2(testInput) == 64)
     part2(input).println()
-}
-
-private fun <V, E> DefaultDirectedWeightedGraph<V, E>.addEdgeNew(start: V, end: V, weight: Int) {
-    this.addVertex(start)
-    this.addVertex(end)
-    val edge = this.addEdge(start, end)
-    edge?.let { this.setEdgeWeight(it, weight.toDouble()) }
 }
 
 data class DirectedPoint(val point: Point, val direction: Direction) {
